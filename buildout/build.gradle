@@ -1,0 +1,53 @@
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$rootProject.ext.springBootVersion")
+    }
+}
+configurations {
+    implementationOnly {
+        extendsFrom annotationProcessor
+    }
+}
+apply plugin: 'org.springframework.boot'
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    compile "org.slf4j:jul-to-slf4j:1.7.28"
+    compile "org.springframework.boot:spring-boot-starter-webflux:$springBootVersion"
+    compile 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
+    implementation "org.modelmapper:modelmapper:$modelMapperVersion"
+    implementation "javax.inject:javax.inject:1"
+    implementation "io.springfox:springfox-swagger2:$swaggerVersion"
+    implementation "io.springfox:springfox-swagger-ui:$swaggerVersion"
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "redis.clients:jedis:3.2.0"
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testCompile "org.springframework.boot:spring-boot-starter-webflux:$springBootVersion"
+    testCompile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
+    testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
+    implementation "net.sargue:mailgun:1.9.0"
+    testImplementation("org.mockito:mockito-junit-jupiter:$rootProject.ext.mockitoVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$rootProject.ext.junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$rootProject.ext.junitVersion")
+    testImplementation("org.junit.platform:junit-platform-launcher" +
+            ":$rootProject.ext.junitPlatformLauncherVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$rootProject.ext.junitVersion")
+    compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+    testCompile group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
+}
+task loaddata(type: JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    main = 'com.crio.buildouts.integ.test.IntegrationTest'
+}
